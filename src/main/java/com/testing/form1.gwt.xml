@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='form1'>
+	<script src="message_sender.js" />
+	<inherits name='com.google.gwt.user.User' />
+	<inherits name='com.sencha.gxt.ui.GXT' />
+	<entry-point class='com.testing.client.Form1' />
+	<source path='base' />
+	<source path='client' />
+</module>

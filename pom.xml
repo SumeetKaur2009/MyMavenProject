@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>6</groupId>
+	<artifactId>MyMavenProject</artifactId>
+	<packaging>war</packaging>
+	<version>1</version>
+	<name>dynamic-ui-form</name>
+
+	<!-- PROPERTIES -->
+	<properties>
+		<gwt.version>2.4.0</gwt.version>
+		<gxt.version>3.0.1</gxt.version>
+		<java-jdk.version>1.6</java-jdk.version>
+		<maven-surefire.version>2.16</maven-surefire.version>
+		<maven-compiler.version>3.1</maven-compiler.version>
+		<maven-assembly.version>2.5.5</maven-assembly.version>
+		<maven-war.version>2.4</maven-war.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+	</properties>
+
+	<!-- DEPENDENCIES -->
+	<dependencies>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-servlet</artifactId>
+			<version>${gwt.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+			<version>${gwt.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.sencha.gxt</groupId>
+			<artifactId>gxt</artifactId>
+			<version>${gxt.version}</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<!-- BUILD -->
+	<build>
+		<outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
+		<!-- <finalName>${wfforms.directory}</finalName> -->
+		<plugins>
+			<!-- maven-surefire-plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven-surefire.version}</version>
+				<configuration>
+					<skipTests>true</skipTests>
+					<useSystemClassLoader>false</useSystemClassLoader>
+				</configuration>
+			</plugin>
+			<!-- gwt-maven-plugin -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>gwt-maven-plugin</artifactId>
+				<version>${gwt.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<outputDirectory>${webappDirectory}</outputDirectory>
+					<!-- <webappDirectory>${webappDirectory}</webappDirectory> -->
+				</configuration>
+			</plugin>
+			<!-- maven-war-plugin -->
+<!-- 			<plugin> -->
+<!-- 				<groupId>org.apache.maven.plugins</groupId> -->
+<!-- 				<artifactId>maven-war-plugin</artifactId> -->
+<!-- 				<version>${maven-war.version}</version> -->
+<!-- 				<configuration> -->
+<!-- 					<failOnMissingWebXml>false</failOnMissingWebXml> -->
+<!-- 					<webappDirectory>${webappDirectory}</webappDirectory> -->
+<!-- 				</configuration> -->
+<!-- 			</plugin> -->
+			<!-- maven-compiler-plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler.version}</version>
+				<configuration>
+					<source>${java-jdk.version}</source>
+					<target>${java-jdk.version}</target>
+				</configuration>
+			</plugin>
+			<!-- maven-assembly-plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>${maven-assembly.version}</version>
+				<configuration>
+					<descriptors>
+						<descriptor>src/assembly/zip.xml</descriptor>
+					</descriptors>
+				</configuration>
+				<executions>
+					<execution>
+						<id>assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

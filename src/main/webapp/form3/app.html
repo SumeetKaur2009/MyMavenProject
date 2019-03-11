@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Form3</title>
+<script type="text/javascript" src="message_sender.js"></script>
+<script src="http://code.jquery.com/jquery-1.7.js" type="text/javascript"></script>
+<script type="text/javascript">
+	function doComplete() {
+		function keys(e){
+			var keyword = null;
+			if (window.event){
+				keyword = window.event.keyCode;
+			} else {
+				keyword = e.which; //NON IE;
+			} 
+			if (keyword < 48 || keyword > 57){
+				if (keyword == 48 || keyword == 127){
+					return;
+				}
+				return false;
+			}
+		}
+		function validate(evt) {
+			var theEvent = evt || window.event;
+			var key = theEvent.keyCode || theEvent.which;
+			key = String.fromCharCode( key );
+			var regex = /[0-9]|\./;
+			if( !regex.test(key) ) {
+				theEvent.returnValue = false;
+				if(theEvent.preventDefault) theEvent.preventDefault();
+			}
+		}
+		
+		var name = document.getElementById('name').value;
+		var address = document.getElementById('address').value;
+		var motivation = document.getElementById('motivation').value;
+		var approved = document.getElementById('approved').value;
+		var approvedTime = new Date();
+		var age = document.getElementById('age').value; 
+		var percent = document.getElementById('percent').value; 
+		
+		if(approved.localeCompare("true") === 0){
+			approved = true;
+		} else {
+			approved = false;
+		}
+		var serializedData = new SerializedData();
+		var data = {
+			"name" : name,
+			"address" : address,
+			"motivation" : motivation,
+			"approved" : approved,
+			"approvedTime" : approvedTime,
+			"age" : age,
+			"percent": percent,
+			"approver" : "sadmin"
+		}
+		
+		
+		var resultData = serializedData.convertData(data);
+		
+		var newData = {
+			"command" : "complete",
+			"data" : resultData
+		};
+		window.MSG_SENDER.sendDataToParent(newData);
+	}
+
+	function doSave() {
+		var name = document.getElementById('name').value;
+		var address = document.getElementById('address').value;
+		var motivation = document.getElementById('motivation').value;
+		var approved = document.getElementById('approved').value;
+		var approvedTime = new Date();
+		var age = document.getElementById('age').value; 
+		var percent = document.getElementById('percent').value; 
+		
+		if(approved.localeCompare("true") === 0){
+			approved = true;
+		} else {
+			approved = false;
+		}
+		var serializedData = new SerializedData();
+		var data = {
+			"name" : name,
+			"address" : address,
+			"motivation" : motivation,
+			"approved" : approved,
+			"approvedTime" : approvedTime,
+			"age" : age,
+			"percent": percent,
+			"approver" : "sadmin"
+		}
+		
+		var resultData = serializedData.convertData(data);
+		
+		var newData = {
+			"command" : "complete",
+			"data" : resultData
+		};
+		window.MSG_SENDER.sendDataToParent(newData);
+	}
+
+	function doClose() {
+		var newData = {
+			"command" : "close"
+		};
+		var port = window.location.port;
+		var curUrl = window.location.protocol + "//" + window.location.hostname;
+		if (port !== null) {
+			curUrl = curUrl + ":" + port;
+		}
+		window.MSG_SENDER.sendDataToParent(newData);
+	}
+
+	/*
+	window.addEventListener('message',function(event){
+		var port = window.location.port;
+	    var curUrl = window.location.protocol + "//" + window.location.hostname;
+		if(port != null) {
+			curUrl = curUrl + ":" + port;
+		}
+		if(event.origin !== curUrl) return;
+		var data = JSON.parse(event.data);
+		alert('received response:  id=' + data.id);
+		alert(event.data);
+		if(data.name !== undefined) {
+			document.getElementById('name').value = data.name;
+		}
+		
+		if(data.address !== undefined) {
+			document.getElementById('address').value = data.address;
+		}
+		if(data.motivation !== undefined) {
+			document.getElementById('motivation').value = data.motivation;
+		}
+		if(data.approved !== undefined) {
+			document.getElementById('approved').value = data.approved;
+		}
+	},false);
+	 */
+
+	function formOnMessage(data) {
+		if (data.name !== undefined) {
+			document.getElementById('name').value = data.name;
+		}
+
+		if (data.address !== undefined) {
+			document.getElementById('address').value = data.address;
+		}
+
+		if (data.motivation !== undefined) {
+			document.getElementById('motivation').value = data.motivation;
+		}
+
+		if (data.approved !== undefined) {
+			document.getElementById('approved').value = data.approved;
+		}
+	}
+</script>
+</head>
+<body>
+	<div>
+		<h1>Nhập thông tin</h1>
+		<table>
+			<tr>
+				<td>Tên:</td>
+				<td><input id="name" type="text" /></td>
+			</tr>
+			<tr>
+				<td>Địa chỉ:</td>
+				<td><input id="address" type="text" /></td>
+			</tr>
+			<tr>
+				<td>Motivation:</td>
+				<td><input id="motivation" type="text" /></td>
+			</tr>
+			<tr>
+				<td>Age:</td>
+				<td><input onkeypress="return keys(event)" id="age" type="number" /></td>
+			</tr>
+			<tr>
+				<td>Percent:</td>
+				<td><input onkeypress="validate(event)" id="percent" type="number" /></td>
+			</tr>
+			<tr>
+				<td>Kết quả duyệt:</td>
+				<td><select id="approved">
+						<option value="true">APPROVED</option>
+						<option value="false">DENIED</option>
+				</select></td>
+			</tr>
+			<tr>
+				<td><button onclick="doComplete()">OK</button></td>
+				<td><button onclick="doSave()">Save</button></td>
+				<td><button onclick="doClose()">Close</button></td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>
